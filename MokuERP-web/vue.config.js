@@ -7,7 +7,7 @@ function resolve (dir) {
 
 // vue.config.js
 module.exports = {
-    publicPath: './',
+    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
     // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
     productionSourceMap: false,
     configureWebpack: config => {
@@ -47,13 +47,7 @@ module.exports = {
     },
     devServer: {
         port: 3000,
-        proxy: {
-            '/MokuERP-boot': {
-                target: 'http://localhost:9999', // 请求本地 需要MokuERP-boot后台项目
-                ws: false,
-                changeOrigin: true
-            }
-        }
+        proxy: 'http://localhost:9999'
     },
     lintOnSave: undefined
 }

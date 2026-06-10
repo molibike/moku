@@ -8,3 +8,9 @@
 
 ## front
 **/*.lock
+**/node_modules
+
+## tools & dependencies
+**/tools
+**/upload
+**/dist

@@ -23,7 +23,7 @@
         </javaTypeResolver>
 
         <!-- generate Model -->
-        <javaModelGenerator targetPackage="com.jsh.erp.datasource.entities"
+        <javaModelGenerator targetPackage="com.moku.erp.datasource.entities"
                             targetProject="src\main\java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
@@ -36,7 +36,7 @@
 
         <!-- generate Mapper -->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jsh.erp.datasource.mappers"
+                             targetPackage="com.moku.erp.datasource.mappers"
                              targetProject="src\main\java">
             <property name="enableSubPackages" value="false"/>
             <property name="exampleMethodVisibility" value="public"/>

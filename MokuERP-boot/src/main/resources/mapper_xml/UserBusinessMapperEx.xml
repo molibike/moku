@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jsh.erp.datasource.mappers.UserBusinessMapperEx">
+<mapper namespace="com.moku.erp.datasource.mappers.UserBusinessMapperEx">
     <update id="batchDeleteUserBusinessByIds">
         update jsh_user_business
         set delete_flag='1'
@@ -12,7 +12,7 @@
         )
     </update>
 
-    <select id="getBasicDataByKeyIdAndType" resultType="com.jsh.erp.datasource.entities.UserBusiness">
+    <select id="getBasicDataByKeyIdAndType" resultType="com.moku.erp.datasource.entities.UserBusiness">
         select * from jsh_user_business
         where key_id=#{keyId} and type=#{type}
         and ifnull(delete_flag,'0') !='1'

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jsh.erp.datasource.mappers.MsgMapperEx">
-    <resultMap extends="com.jsh.erp.datasource.mappers.MsgMapper.BaseResultMap" id="ResultExMap" type="com.jsh.erp.datasource.entities.MsgEx">
+<mapper namespace="com.moku.erp.datasource.mappers.MsgMapperEx">
+    <resultMap extends="com.moku.erp.datasource.mappers.MsgMapper.BaseResultMap" id="ResultExMap" type="com.moku.erp.datasource.entities.MsgEx">
     </resultMap>
-    <select id="selectByConditionMsg" parameterType="com.jsh.erp.datasource.entities.MsgExample" resultMap="ResultExMap">
+    <select id="selectByConditionMsg" parameterType="com.moku.erp.datasource.entities.MsgExample" resultMap="ResultExMap">
         SELECT *
         FROM jsh_msg
         WHERE 1=1

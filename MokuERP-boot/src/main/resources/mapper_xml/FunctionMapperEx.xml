@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jsh.erp.datasource.mappers.FunctionMapperEx">
-    <resultMap extends="com.jsh.erp.datasource.mappers.FunctionMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.entities.FunctionEx">
+<mapper namespace="com.moku.erp.datasource.mappers.FunctionMapperEx">
+    <resultMap extends="com.moku.erp.datasource.mappers.FunctionMapper.BaseResultMap" id="ResultMapEx" type="com.moku.erp.datasource.entities.FunctionEx">
         <result column="parent_name" jdbcType="VARCHAR" property="parentName" />
     </resultMap>
-    <select id="selectByConditionFunction" parameterType="com.jsh.erp.datasource.entities.FunctionExample"
+    <select id="selectByConditionFunction" parameterType="com.moku.erp.datasource.entities.FunctionExample"
             resultMap="ResultMapEx">
         select fa.*, fb.name parent_name
         from jsh_function fa

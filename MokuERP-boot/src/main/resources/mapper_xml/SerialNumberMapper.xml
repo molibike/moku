@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jsh.erp.datasource.mappers.SerialNumberMapper">
-  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.SerialNumber">
+<mapper namespace="com.moku.erp.datasource.mappers.SerialNumberMapper">
+  <resultMap id="BaseResultMap" type="com.moku.erp.datasource.entities.SerialNumber">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="depot_id" jdbcType="BIGINT" property="depotId" />
@@ -80,7 +80,7 @@
     id, material_id, depot_id, serial_number, is_sell, in_price, remark, delete_flag, 
     create_time, creator, update_time, updater, in_bill_no, out_bill_no, tenant_id
   </sql>
-  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.SerialNumberExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.moku.erp.datasource.entities.SerialNumberExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -104,13 +104,13 @@
     delete from jsh_serial_number
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.SerialNumberExample">
+  <delete id="deleteByExample" parameterType="com.moku.erp.datasource.entities.SerialNumberExample">
     delete from jsh_serial_number
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.SerialNumber">
+  <insert id="insert" parameterType="com.moku.erp.datasource.entities.SerialNumber">
     insert into jsh_serial_number (id, material_id, depot_id, 
       serial_number, is_sell, in_price, 
       remark, delete_flag, create_time, 
@@ -124,7 +124,7 @@
       #{inBillNo,jdbcType=VARCHAR}, #{outBillNo,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.SerialNumber">
+  <insert id="insertSelective" parameterType="com.moku.erp.datasource.entities.SerialNumber">
     insert into jsh_serial_number
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -221,7 +221,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.SerialNumberExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.moku.erp.datasource.entities.SerialNumberExample" resultType="java.lang.Long">
     select count(*) from jsh_serial_number
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -301,7 +301,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.SerialNumber">
+  <update id="updateByPrimaryKeySelective" parameterType="com.moku.erp.datasource.entities.SerialNumber">
     update jsh_serial_number
     <set>
       <if test="materialId != null">
@@ -349,7 +349,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.SerialNumber">
+  <update id="updateByPrimaryKey" parameterType="com.moku.erp.datasource.entities.SerialNumber">
     update jsh_serial_number
     set material_id = #{materialId,jdbcType=BIGINT},
       depot_id = #{depotId,jdbcType=BIGINT},

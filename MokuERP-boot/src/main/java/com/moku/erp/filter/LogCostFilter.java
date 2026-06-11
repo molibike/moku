@@ -47,13 +47,26 @@ public class LogCostFilter implements Filter {
             return;
         }
         if (requestUrl != null && (requestUrl.contains("/doc.html") ||
-            requestUrl.contains("/user/login") || requestUrl.contains("/user/register"))) {
+            requestUrl.contains("/user/login") || requestUrl.contains("/user/register") ||
+            requestUrl.equals("/") || requestUrl.equals("/index.html") ||
+            requestUrl.endsWith(".js") || requestUrl.endsWith(".css") ||
+            requestUrl.endsWith(".png") || requestUrl.endsWith(".jpg") ||
+            requestUrl.endsWith(".jpeg") || requestUrl.endsWith(".gif") ||
+            requestUrl.endsWith(".ico") || requestUrl.endsWith(".woff") ||
+            requestUrl.endsWith(".woff2") || requestUrl.endsWith(".ttf") ||
+            requestUrl.endsWith(".eot") || requestUrl.endsWith(".svg"))) {
             chain.doFilter(request, response);
             return;
         }
         if (null != allowUrls && allowUrls.length > 0) {
             for (String url : allowUrls) {
                 if (requestUrl.startsWith(url)) {
+                    chain.doFilter(request, response);
+                    return;
+                }
+                // 同时匹配不带 /MokuERP-boot 前缀的路径
+                String shortUrl = url.replaceFirst("/MokuERP-boot", "");
+                if (!shortUrl.equals(url) && requestUrl.startsWith(shortUrl)) {
                     chain.doFilter(request, response);
                     return;
                 }

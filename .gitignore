@@ -16,3 +16,22 @@
 **/dist
 MokuERP-dist/
 MokuERP-dist.zip
+
+## build logs
+*.log
+
+## standalone runtime
+standalone/logs.home_IS_UNDEFINED/
+standalone/*.jar
+standalone/*.log
+
+## installer build output
+installer/output/
+installer/iscc*.log
+installer/launcher/*.exe
+installer/launcher/rsrc.syso
+installer/launcher/stop/rsrc.syso
+
+## tmp
+/tmp
+**/tmp

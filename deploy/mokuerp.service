@@ -1,0 +1,14 @@
+[Unit]
+Description=MokuERP API Service
+After=network.target mysql.service redis.service
+
+[Service]
+Type=simple
+User=www
+WorkingDirectory=/opt/mokuerp
+ExecStart=/usr/bin/java -Xms1000m -Xmx2000m -jar /opt/mokuerp/MokuERP.jar
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

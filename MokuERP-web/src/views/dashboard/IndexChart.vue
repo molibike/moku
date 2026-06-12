@@ -181,7 +181,7 @@
         systemUrl: window.SYS_URL,
         loading: true,
         center: null,
-        statistics: {},
+        statistics: { todaySale: 0, todayRetailSale: 0, todayBuy: 0, monthSale: 0, monthRetailSale: 0, monthBuy: 0, yesterdaySale: 0, yesterdayRetailSale: 0, yesterdayBuy: 0, yearSale: 0, yearRetailSale: 0, yearBuy: 0 },
         barHeight: document.documentElement.clientHeight-585,
         yaxisText: '金额',
         buyPriceData: [],

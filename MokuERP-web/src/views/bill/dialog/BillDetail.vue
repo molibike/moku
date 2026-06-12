@@ -42,6 +42,27 @@
       <a-button v-if="billType === '盘点复盘'" @click="stockCheckReplayExportExcel()">导出</a-button>
       <!--反审核-->
       <a-button v-if="checkFlag && isCanBackCheck && model.status==='1'" @click="handleBackCheck()">反审核</a-button>
+      <a-popover trigger="click" placement="top">
+        <template slot="content">
+          <a-checkbox-group @change="onDetailColChange" v-model="settingDataIndex">
+            <a-row style="width: 400px">
+              <template v-for="(item, index) in detailDefColumns">
+                <template v-if="item.dataIndex">
+                  <a-col :span="8" :key="index">
+                    <a-checkbox :value="item.dataIndex">{{item.title}}</a-checkbox>
+                  </a-col>
+                </template>
+              </template>
+            </a-row>
+          </a-checkbox-group>
+          <a-row>
+            <a-col :span="24" style="text-align:right;padding-top:5px;">
+              <a-button size="small" @click="handleRestDetailDefault">恢复默认</a-button>
+            </a-col>
+          </a-row>
+        </template>
+        <a-button icon="setting">列设置</a-button>
+      </a-popover>
       <a-button key="back" @click="handleCancel">取消</a-button>
     </template>
     <a-form :form="form">
@@ -1239,6 +1260,8 @@
         columns:[],
         //列定义
         defColumns: [],
+        detailDefColumns: [],
+        settingDataIndex: [],
         retailOutColumns: [
           { title: '仓库名称', dataIndex: 'depotName'},
           { title: '条码', dataIndex: 'barCode'},
@@ -1615,7 +1638,8 @@
           for(let i=0; i<this.defColumns.length; i++){
             currentCol.push(this.defColumns[i])
           }
-          this.columns = currentCol
+          this.detailDefColumns = currentCol
+          this.applyDetailColumnsSetting()
         } else if(record.purchaseStatus === '3') {
           //将已出库的标题转为已采购，针对销售订单转采购订单的场景
           for(let i=0; i<this.defColumns.length; i++){
@@ -1633,7 +1657,8 @@
             }
             currentCol.push(info)
           }
-          this.columns = currentCol
+          this.detailDefColumns = currentCol
+          this.applyDetailColumnsSetting()
         } else {
           for(let i=0; i<this.defColumns.length; i++){
             //移除列
@@ -1661,7 +1686,8 @@
               currentCol.push(info)
             }
           }
-          this.columns = currentCol
+          this.detailDefColumns = currentCol
+          this.applyDetailColumnsSetting()
         }
       },
       initPlatform() {
@@ -1807,10 +1833,65 @@
         findBillDetailByNumber({ number: billNumber }).then((res) => {
           if (res && res.code === 200) {
             let type = res.data.type === "其它"? "":res.data.type
-            this.show(res.data, res.data.subType + type);
-            this.title = res.data.subType + type + "-详情";
+            let billType = res.data.subType + type
+            let prefixNo = this.getPrefixNoByType(billType)
+            this.show(res.data, billType, prefixNo);
+            this.title = billType + "-详情";
           }
         })
+      },
+      getPrefixNoByType(type) {
+        const typeMap = {
+          '零售出库': 'LSCK',
+          '零售退货入库': 'LSTH',
+          '请购单': 'QGD',
+          '采购订单': 'CGDD',
+          '采购入库': 'CGRK',
+          '采购退货出库': 'CGTH',
+          '销售订单': 'XSDD',
+          '销售出库': 'XSCK',
+          '销售退货入库': 'XSTH',
+          '其它入库': 'QTRK',
+          '其它出库': 'QTCK',
+          '调拨出库': 'DBCK',
+          '组装单': 'ZZD',
+          '拆卸单': 'CXD',
+          '盘点复盘': 'PDFP'
+        }
+        return typeMap[type] || ''
+      },
+      applyDetailColumnsSetting() {
+        if(!this.prefixNo) {
+          this.settingDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
+          this.columns = this.detailDefColumns
+          return
+        }
+        let allDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
+        let columnsStr = Vue.ls.get(this.prefixNo + '_detail')
+        if(columnsStr && columnsStr.indexOf(',') > -1) {
+          let savedIndex = columnsStr.split(',')
+          let validIndex = allDataIndex.filter(idx => savedIndex.includes(idx))
+          this.settingDataIndex = validIndex.length > 0 ? validIndex : allDataIndex
+        } else {
+          this.settingDataIndex = allDataIndex
+        }
+        this.columns = this.detailDefColumns.filter(item => {
+          if(!item.dataIndex) return true
+          return this.settingDataIndex.includes(item.dataIndex)
+        })
+      },
+      onDetailColChange(checkedValues) {
+        this.columns = this.detailDefColumns.filter(item => {
+          if(!item.dataIndex) return true
+          return checkedValues.includes(item.dataIndex)
+        })
+        let columnsStr = checkedValues.join(',')
+        Vue.ls.set(this.prefixNo + '_detail', columnsStr)
+      },
+      handleRestDetailDefault() {
+        Vue.ls.remove(this.prefixNo + '_detail')
+        this.settingDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
+        this.columns = this.detailDefColumns
       },
       myHandleFinancialDetail(billNo) {
         let that = this

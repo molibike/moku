@@ -85,7 +85,6 @@ export function generateIndexRouter(data) {
   let indexRouter = generateChildRouters(data)
   indexRouter.splice(0,0, {
     path: '/',
-    name: '首页',
     component: () => import('@/components/layouts/TabLayout'),
     meta: {
       title: '首页',

@@ -23,11 +23,13 @@ MokuERP-dist.zip
 ## runtime data (redis dump generated at runtime)
 **/dump.rdb
 
+## runtime log dir when LOG_HOME is undefined
+**/logs.home_IS_UNDEFINED/
+
 ## build logs
 *.log
 
 ## standalone runtime
-standalone/logs.home_IS_UNDEFINED/
 standalone/*.jar
 standalone/*.log
 
@@ -38,6 +40,13 @@ installer/launcher/*.exe
 installer/launcher/*.jar
 installer/launcher/rsrc.syso
 installer/launcher/stop/rsrc.syso
+
+## compiled frontend gz artifacts (redundant with uncompressed counterparts)
+MokuERP-boot/src/main/resources/static/**/*.gz
+
+## personal deployment automation scripts
+deploy/*.py
+deploy/*.ps1
 
 ## tmp
 /tmp

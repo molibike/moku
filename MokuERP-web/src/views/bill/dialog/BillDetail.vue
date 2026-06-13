@@ -44,14 +44,12 @@
       <a-button v-if="checkFlag && isCanBackCheck && model.status==='1'" @click="handleBackCheck()">反审核</a-button>
       <a-popover trigger="click" placement="top">
         <template slot="content">
-          <a-checkbox-group @change="onDetailColChange" v-model="settingDataIndex">
+          <a-checkbox-group @change="onDetailColChange" v-model="settingDataIndex" :defaultValue="settingDataIndex">
             <a-row style="width: 400px">
               <template v-for="(item, index) in detailDefColumns">
-                <template v-if="item.dataIndex">
-                  <a-col :span="8" :key="index">
-                    <a-checkbox :value="item.dataIndex">{{item.title}}</a-checkbox>
-                  </a-col>
-                </template>
+                <a-col v-if="item.dataIndex" :span="8" :key="index">
+                  <a-checkbox :value="item.dataIndex">{{item.title}}</a-checkbox>
+                </a-col>
               </template>
             </a-row>
           </a-checkbox-group>
@@ -1261,6 +1259,7 @@
         //列定义
         defColumns: [],
         detailDefColumns: [],
+        detailDefaultDataIndex: [],
         settingDataIndex: [],
         retailOutColumns: [
           { title: '仓库名称', dataIndex: 'depotName'},
@@ -1631,6 +1630,15 @@
           if(ds[i].position) {
             needAddkeywords.push('position')
           }
+          if(ds[i].model) {
+            needAddkeywords.push('model')
+          }
+          if(ds[i].color) {
+            needAddkeywords.push('color')
+          }
+          if(ds[i].materialOther) {
+            needAddkeywords.push('materialOther')
+          }
         }
         let currentCol = [{title:'#',dataIndex:'',align:'center',customRender:function(t,r,index){return parseInt(index)+1;}}]
         if(record.status === '3') {
@@ -1639,6 +1647,7 @@
             currentCol.push(this.defColumns[i])
           }
           this.detailDefColumns = currentCol
+          this.detailDefaultDataIndex = currentCol.filter(item => item.dataIndex).map(item => item.dataIndex)
           this.applyDetailColumnsSetting()
         } else if(record.purchaseStatus === '3') {
           //将已出库的标题转为已采购，针对销售订单转采购订单的场景
@@ -1658,35 +1667,32 @@
             currentCol.push(info)
           }
           this.detailDefColumns = currentCol
+          this.detailDefaultDataIndex = currentCol.filter(item => item.dataIndex).map(item => item.dataIndex)
           this.applyDetailColumnsSetting()
         } else {
           for(let i=0; i<this.defColumns.length; i++){
-            //移除列
-            let needRemoveKeywords = ['finishNumber','snList','batchNumber','expirationDate','sku','weight','position']
-            if(needRemoveKeywords.indexOf(this.defColumns[i].dataIndex)===-1) {
-              let info = {}
-              info.title = this.defColumns[i].title
-              info.dataIndex = this.defColumns[i].dataIndex
-              if(this.defColumns[i].width) {
-                info.width = this.defColumns[i].width
-              }
-              if(this.defColumns[i].dataIndex === 'barCode') {
-                info.scopedSlots = { customRender: 'customBarCode' }
-              }
-              currentCol.push(info)
+            let info = {}
+            info.title = this.defColumns[i].title
+            info.dataIndex = this.defColumns[i].dataIndex
+            if(this.defColumns[i].width) {
+              info.width = this.defColumns[i].width
             }
-            //添加有数据的列
-            if(needAddkeywords.indexOf(this.defColumns[i].dataIndex)>-1) {
-              let info = {}
-              info.title = this.defColumns[i].title
-              info.dataIndex = this.defColumns[i].dataIndex
-              if(this.defColumns[i].width) {
-                info.width = this.defColumns[i].width
-              }
-              currentCol.push(info)
+            if(this.defColumns[i].dataIndex === 'barCode') {
+              info.scopedSlots = { customRender: 'customBarCode' }
             }
+            currentCol.push(info)
           }
           this.detailDefColumns = currentCol
+          //默认可见列：finishNumber始终隐藏；其它特殊列仅在有数据时默认显示；用户保存的设置优先级更高
+          let alwaysHide = ['finishNumber']
+          let conditional = ['snList','batchNumber','expirationDate','sku','weight','position','model','color','materialOther']
+          this.detailDefaultDataIndex = this.defColumns
+            .filter(col => {
+              if(alwaysHide.indexOf(col.dataIndex) > -1) return false
+              if(conditional.indexOf(col.dataIndex) > -1) return needAddkeywords.indexOf(col.dataIndex) > -1
+              return true
+            })
+            .map(col => col.dataIndex)
           this.applyDetailColumnsSetting()
         }
       },
@@ -1861,19 +1867,23 @@
         return typeMap[type] || ''
       },
       applyDetailColumnsSetting() {
+        let allDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
+        let fallback = this.detailDefaultDataIndex.length > 0 ? this.detailDefaultDataIndex : allDataIndex
         if(!this.prefixNo) {
-          this.settingDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
-          this.columns = this.detailDefColumns
+          this.settingDataIndex = fallback
+          this.columns = this.detailDefColumns.filter(item => {
+            if(!item.dataIndex) return true
+            return fallback.includes(item.dataIndex)
+          })
           return
         }
-        let allDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
         let columnsStr = Vue.ls.get(this.prefixNo + '_detail')
         if(columnsStr && columnsStr.indexOf(',') > -1) {
           let savedIndex = columnsStr.split(',')
           let validIndex = allDataIndex.filter(idx => savedIndex.includes(idx))
-          this.settingDataIndex = validIndex.length > 0 ? validIndex : allDataIndex
+          this.settingDataIndex = validIndex.length > 0 ? validIndex : fallback
         } else {
-          this.settingDataIndex = allDataIndex
+          this.settingDataIndex = fallback
         }
         this.columns = this.detailDefColumns.filter(item => {
           if(!item.dataIndex) return true
@@ -1890,8 +1900,11 @@
       },
       handleRestDetailDefault() {
         Vue.ls.remove(this.prefixNo + '_detail')
-        this.settingDataIndex = this.detailDefColumns.filter(item => item.dataIndex).map(item => item.dataIndex)
-        this.columns = this.detailDefColumns
+        this.settingDataIndex = this.detailDefaultDataIndex
+        this.columns = this.detailDefColumns.filter(item => {
+          if(!item.dataIndex) return true
+          return this.detailDefaultDataIndex.includes(item.dataIndex)
+        })
       },
       myHandleFinancialDetail(billNo) {
         let that = this

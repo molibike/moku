@@ -174,19 +174,29 @@
     }
 
     .container {
+      display: flex;
+      align-items: flex-start;
       float: left;
-      width: 100%;
+      width: auto;
       z-index: 99;
       height: 70%;
 
       .poster-img {
-        float: left;
+        flex: 0 0 746px;
+        width: 746px;
         height: 100%;
+
+        img {
+          display: block;
+          width: 100%;
+          height: auto;
+        }
       }
 
       .right-form {
         background-size: 100%;
         position: relative;
+        flex: 0 0 340px;
         width: 340px;
         height: 460px;
         background: rgba(255, 255, 255, 1);

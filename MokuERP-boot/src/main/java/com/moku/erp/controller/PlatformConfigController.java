@@ -2,9 +2,7 @@ package com.moku.erp.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.moku.erp.datasource.entities.PlatformConfig;
-import com.moku.erp.datasource.entities.User;
 import com.moku.erp.service.platformConfig.PlatformConfigService;
-import com.moku.erp.service.user.UserService;
 import com.moku.erp.utils.BaseResponseInfo;
 import com.moku.erp.utils.ErpInfo;
 import io.swagger.annotations.Api;

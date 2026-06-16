@@ -312,13 +312,13 @@ public class MaterialController {
         try {
             String[] mpArr = mpList.split(",");
             List<MaterialVo4Unit> materialList = materialService.getMaterialByMeId(meId);
-            if(materialList!=null && materialList.size()!=1) {
+            if(materialList == null || materialList.size()!=1) {
                 return item;
-            } else if(materialList.size() == 1) {
+            } else {
                 MaterialVo4Unit material = materialList.get(0);
                 item.put("Id", material.getMeId()); //商品扩展表的id
                 String ratio; //比例
-                if (material.getUnitId() == null || material.getUnitId().equals("")) {
+                if (material.getUnitId() == null) {
                     ratio = "";
                 } else {
                     ratio = material.getUnitName();

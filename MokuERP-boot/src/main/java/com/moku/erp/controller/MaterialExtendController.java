@@ -36,7 +36,6 @@ public class MaterialExtendController {
     public BaseResponseInfo getDetailList(@RequestParam("materialId") Long materialId,
                                           HttpServletRequest request)throws Exception {
         BaseResponseInfo res = new BaseResponseInfo();
-        Map<String, Object> map = new HashMap<String, Object>();
         try {
             List<MaterialExtendVo4List> dataList = new ArrayList<MaterialExtendVo4List>();
             if(materialId!=0) {
@@ -85,7 +84,6 @@ public class MaterialExtendController {
     public BaseResponseInfo getInfoByBarCode(@RequestParam("barCode") String barCode,
                                           HttpServletRequest request)throws Exception {
         BaseResponseInfo res = new BaseResponseInfo();
-        Map<String, Object> map = new HashMap<String, Object>();
         try {
             MaterialExtend materialExtend = materialExtendService.getInfoByBarCode(barCode);
             res.code = 200;

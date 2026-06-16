@@ -12,7 +12,6 @@ import com.moku.erp.datasource.vo.DepotHeadVo4List;
 import com.moku.erp.datasource.vo.DepotHeadVo4StatementAccount;
 import com.moku.erp.service.depot.DepotService;
 import com.moku.erp.service.depotHead.DepotHeadService;
-import com.moku.erp.service.redis.RedisService;
 import com.moku.erp.service.systemConfig.SystemConfigService;
 import com.moku.erp.utils.*;
 import io.swagger.annotations.Api;
@@ -427,7 +426,6 @@ public class DepotHeadController {
     public BaseResponseInfo getBillListByLinkNumber(@RequestParam("number") String number,
                                               HttpServletRequest request)throws Exception {
         BaseResponseInfo res = new BaseResponseInfo();
-        DepotHead dh = new DepotHead();
         try {
             List<DepotHead> list = depotHeadService.getBillListByLinkNumber(number);
             res.code = 200;

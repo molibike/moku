@@ -3,11 +3,8 @@ package com.moku.erp.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.moku.erp.constants.BusinessConstants;
-import com.moku.erp.constants.ExceptionConstants;
 import com.moku.erp.datasource.entities.Organization;
 import com.moku.erp.datasource.vo.TreeNode;
-import com.moku.erp.exception.BusinessRunTimeException;
 import com.moku.erp.service.organization.OrganizationService;
 import com.moku.erp.service.user.UserService;
 import com.moku.erp.utils.BaseResponseInfo;
@@ -50,7 +47,6 @@ public class OrganizationController {
     @ApiOperation(value = "根据id来查询机构信息")
     public BaseResponseInfo findById(@RequestParam("id") Long id, HttpServletRequest request) throws Exception {
         BaseResponseInfo res = new BaseResponseInfo();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             List<Organization> dataList = organizationService.findById(id);
             JSONObject outer = new JSONObject();

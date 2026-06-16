@@ -1121,7 +1121,7 @@ public class DepotItemController {
                 res.code = 400;
                 res.data = data;
             }
-            if(src.getRows()>1000) {
+            if(src != null && src.getRows()>1000) {
                 message = "导入失败，明细不能超出1000条";
                 res.code = 500;
                 data.put("message", message);

@@ -1,7 +1,6 @@
 package com.moku.erp.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.moku.erp.datasource.entities.Msg;
 import com.moku.erp.datasource.entities.MsgEx;
 import com.moku.erp.service.msg.MsgService;
 import com.moku.erp.utils.BaseResponseInfo;

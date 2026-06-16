@@ -160,6 +160,9 @@
           {
             title: '备注', align:"left", dataIndex: 'description', width: 150
           },
+          {
+            title: '创建者', align:"left", dataIndex: 'creatorName', width: 100
+          },
           { title: '排序', align:"left", dataIndex: 'sort', width: 50},
           { title: '状态',dataIndex: 'enabled',width:60,align:"center",
             scopedSlots: { customRender: 'customRenderFlag' }

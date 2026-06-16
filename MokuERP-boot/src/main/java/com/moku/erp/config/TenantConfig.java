@@ -83,6 +83,10 @@ public class TenantConfig {
                     return true;
                 } else if ("com.moku.erp.datasource.mappers.RoleMapperEx.getRoleWithoutTenant".equals(ms.getId())) {
                     return true;
+                } else if ("com.moku.erp.datasource.mappers.RoleMapperEx.selectByConditionRole".equals(ms.getId())) {
+                    return true;
+                } else if ("com.moku.erp.datasource.mappers.RoleMapperEx.countsByRole".equals(ms.getId())) {
+                    return true;
                 } else if ("com.moku.erp.datasource.mappers.LogMapperEx.insertLogWithUserId".equals(ms.getId())) {
                     return true;
                 } else if ("com.moku.erp.datasource.mappers.UserBusinessMapperEx.getBasicDataByKeyIdAndType".equals(ms.getId())) {

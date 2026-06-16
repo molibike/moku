@@ -3,6 +3,7 @@ package com.moku.erp.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.moku.erp.datasource.entities.Role;
+import com.moku.erp.datasource.entities.RoleEx;
 import com.moku.erp.service.role.RoleService;
 import com.moku.erp.service.userBusiness.UserBusinessService;
 import com.moku.erp.utils.ErpInfo;
@@ -69,7 +70,7 @@ public class RoleController {
 
     @GetMapping(value = "/allList")
     @ApiOperation(value = "查询全部角色列表")
-    public List<Role> allList(HttpServletRequest request)throws Exception {
+    public List<RoleEx> allList(HttpServletRequest request)throws Exception {
         return roleService.allList();
     }
 

@@ -41,7 +41,7 @@
       </div>
       <p>
         <span v-if="this.isShowRight">华丽软件</span>
-        © 2015-2030 {{systemTitle}} - All Right Reserved 版权所有
+        © 上海简脉企业策划咨询有限公司
         <a style="color:#00458a; padding-right: 10px" :href="systemUrl" target="_blank">官方网站</a>
         <span v-if="this.isShowRight"><a href="http://beian.miit.gov.cn/" target="_blank">苏ICP备2021042833号</a></span>
       </p>

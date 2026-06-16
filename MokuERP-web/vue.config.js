@@ -46,10 +46,10 @@ module.exports = {
         }
     },
     devServer: {
-        port: 3000,
+        port: 3001,
         proxy: {
             '/api': {
-                target: 'http://localhost:9999',
+                target: 'http://192.168.105.246:9999',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '' }
             }

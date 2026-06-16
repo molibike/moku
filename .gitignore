@@ -1,5 +1,6 @@
 ## ide
 **/.idea
+**/.vscode
 *.iml
 
 ## backend
@@ -43,6 +44,12 @@ installer/launcher/stop/rsrc.syso
 
 ## compiled frontend gz artifacts (redundant with uncompressed counterparts)
 MokuERP-boot/src/main/resources/static/**/*.gz
+
+## compiled frontend js artifacts (built from MokuERP-web source)
+MokuERP-boot/src/main/resources/static/js/
+
+## compiled frontend css artifacts (built from MokuERP-web source)
+MokuERP-boot/src/main/resources/static/css/
 
 ## personal deployment automation scripts
 deploy/*.py

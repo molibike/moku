@@ -2,21 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.moku.erp.datasource.mappers.RoleMapperEx">
     <resultMap extends="com.moku.erp.datasource.mappers.RoleMapper.BaseResultMap" id="ResultExMap" type="com.moku.erp.datasource.entities.RoleEx">
+        <result column="creator_name" property="creatorName"/>
     </resultMap>
     <select id="selectByConditionRole" parameterType="com.moku.erp.datasource.entities.RoleExample" resultMap="ResultExMap">
-        SELECT *
-        FROM jsh_role
+        SELECT r.*,
+               '超管' AS creator_name
+        FROM jsh_role r
         WHERE 1=1
-        and ifnull(delete_flag,'0') !='1'
+        and ifnull(r.delete_flag,'0') !='1'
         <if test="name != null">
             <bind name="bindName" value="'%'+name+'%'"/>
-            and name like #{bindName}
+            and r.name like #{bindName}
         </if>
         <if test="description != null">
             <bind name="bindDescription" value="'%'+description+'%'"/>
-            and description like #{bindDescription}
+            and r.description like #{bindDescription}
         </if>
-        order by sort asc, id desc
+        order by r.sort asc, r.id desc
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>

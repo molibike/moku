@@ -14,10 +14,15 @@ import java.io.IOException;
 @WebFilter(filterName = "LogCostFilter", urlPatterns = {"/*"},
         initParams = {@WebInitParam(name = "filterPath",
                       value = "/MokuERP-boot/user/login#/MokuERP-boot/user/weixinLogin#/MokuERP-boot/user/weixinBind#" +
-                              "/MokuERP-boot/user/registerUser#/MokuERP-boot/user/randomImage#" +
+                              "/MokuERP-boot/user/registerUser#/MokuERP-boot/user/randomImage#/MokuERP-boot/user/getUserBtnByCurrentUser#" +
                               "/MokuERP-boot/platformConfig/getPlatform#/MokuERP-boot/v2/api-docs#/MokuERP-boot/webjars#" +
                               "/MokuERP-boot/systemConfig/static#/MokuERP-boot/api/plugin/wechat/weChat/share#" +
-                              "/MokuERP-boot/api/plugin/general-ledger/pdf/voucher")})
+                              "/MokuERP-boot/api/plugin/general-ledger/pdf/voucher#" +
+                              "/api/user/login#/api/user/weixinLogin#/api/user/weixinBind#" +
+                              "/api/user/registerUser#/api/user/randomImage#/api/user/getUserBtnByCurrentUser#" +
+                              "/api/platformConfig/getPlatform#/api/v2/api-docs#/api/webjars#" +
+                              "/api/systemConfig/static#/api/plugin/wechat/weChat/share#" +
+                              "/api/plugin/general-ledger/pdf/voucher")})
 public class LogCostFilter implements Filter {
 
     private static final String FILTER_PATH = "filterPath";

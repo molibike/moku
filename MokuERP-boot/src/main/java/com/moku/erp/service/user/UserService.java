@@ -841,6 +841,20 @@ public class UserService {
      * @return
      * @throws Exception
      */
+    public JSONArray getAdminBtnStrArr() throws Exception {
+        List<Function> allFunctions = functionService.getFunction();
+        JSONArray adminBtnArr = new JSONArray();
+        for (Function func : allFunctions) {
+            if (StringUtil.isNotEmpty(func.getUrl())) {
+                JSONObject btnObj = new JSONObject();
+                btnObj.put("url", func.getUrl());
+                btnObj.put("btnStr", "1");
+                adminBtnArr.add(btnObj);
+            }
+        }
+        return adminBtnArr;
+    }
+
     public JSONArray getBtnStrArrById(Long userId) throws Exception {
         JSONArray btnStrArr = new JSONArray();
         List<UserBusiness> userRoleList = userBusinessService.getBasicData(userId.toString(), "UserRole");

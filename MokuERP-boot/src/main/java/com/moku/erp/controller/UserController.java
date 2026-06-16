@@ -374,7 +374,9 @@ public class UserController {
             Long userId = userService.getUserId(request);
             String loginName = userService.getUser(userId).getLoginName();
             JSONArray btnStrArr = userService.getBtnStrArrById(userId);
-            if(!"admin".equals(loginName)) {
+            if("admin".equals(loginName)) {
+                data.put("userBtn", userService.getAdminBtnStrArr());
+            } else {
                 data.put("userBtn", btnStrArr);
             }
             res.code = 200;

@@ -16,9 +16,8 @@
       okText="保存"
       style="top:5%;height: 85%;">
       <template slot="footer">
-        <a-button key="back" v-if="isReadOnly" @click="handleCancel">
-          取消
-        </a-button>
+        <a-button key="back" @click="handleCancel">取消</a-button>
+        <a-button key="submit" v-if="!isReadOnly" type="primary" :loading="confirmLoading" @click="handleOk">保存</a-button>
       </template>
       <a-spin :spinning="confirmLoading">
         <a-form :form="form" id="userModal">

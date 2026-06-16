@@ -330,7 +330,6 @@ export default {
       this.currSelected = {}
       this.form.resetFields()
       this.selectedKeys = []
-      this.$refs.departAuth.departId = ''
     },
     handleNodeTypeChange(val) {
       this.currSelected.nodeType = val

@@ -44,9 +44,10 @@
 
       <a-form-item>
         <a-checkbox :checked="checked" @change="handleChange">记住密码</a-checkbox>
-        <router-link v-if="registerFlag==='1'" :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px;" >
+        <!-- 注册租户功能已屏蔽 -->
+        <!-- <router-link v-if="registerFlag==='1'" :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px;" >
           注册租户
-        </router-link>
+        </router-link> -->
       </a-form-item>
 
       <a-form-item style="margin-top:16px">

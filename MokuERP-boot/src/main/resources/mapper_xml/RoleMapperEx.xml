@@ -6,10 +6,14 @@
     </resultMap>
     <select id="selectByConditionRole" parameterType="com.moku.erp.datasource.entities.RoleExample" resultMap="ResultExMap">
         SELECT r.*,
-               '超管' AS creator_name
+               COALESCE(NULLIF(u.username, ''), NULLIF(u.login_name, ''), CASE WHEN r.creator IS NULL THEN '超管' ELSE '' END) AS creator_name
         FROM jsh_role r
+        LEFT JOIN jsh_user u ON r.creator = u.id
         WHERE 1=1
         and ifnull(r.delete_flag,'0') !='1'
+        <if test="tenantId != null">
+            and r.tenant_id = #{tenantId}
+        </if>
         <if test="name != null">
             <bind name="bindName" value="'%'+name+'%'"/>
             and r.name like #{bindName}
@@ -29,6 +33,9 @@
         FROM jsh_role
         WHERE 1=1
         and ifnull(delete_flag,'0') !='1'
+        <if test="tenantId != null">
+            and tenant_id = #{tenantId}
+        </if>
         <if test="name != null">
             <bind name="bindName" value="'%'+name+'%'"/>
             and name like #{bindName}

@@ -17,6 +17,8 @@ public class Role {
 
     private String sort;
 
+    private Long creator;
+
     private Long tenantId;
 
     private String deleteFlag;
@@ -83,6 +85,14 @@ public class Role {
 
     public void setSort(String sort) {
         this.sort = sort == null ? null : sort.trim();
+    }
+
+    public Long getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Long creator) {
+        this.creator = creator;
     }
 
     public Long getTenantId() {

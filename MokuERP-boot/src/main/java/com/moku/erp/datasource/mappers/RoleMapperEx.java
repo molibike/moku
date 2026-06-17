@@ -13,12 +13,14 @@ public interface RoleMapperEx {
     List<RoleEx> selectByConditionRole(
             @Param("name") String name,
             @Param("description") String description,
+            @Param("tenantId") Long tenantId,
             @Param("offset") Integer offset,
             @Param("rows") Integer rows);
 
     Long countsByRole(
             @Param("name") String name,
-            @Param("description") String description);
+            @Param("description") String description,
+            @Param("tenantId") Long tenantId);
 
     int batchDeleteRoleByIds(@Param("updateTime") Date updateTime, @Param("updater") Long updater, @Param("ids") String ids[]);
 

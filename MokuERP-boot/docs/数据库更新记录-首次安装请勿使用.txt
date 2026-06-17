@@ -1603,3 +1603,10 @@ alter table jsh_material_current_stock add current_unit_price decimal(24,6) DEFA
 -- 给系统参数表增加先审核后打印启用标记，启用后，零售、采购、销售等单据，都需要先审核之后才能进行打印
 -- --------------------------------------------------------
 alter table jsh_system_config add audit_print_flag varchar(1) DEFAULT '0' COMMENT '先审核后打印启用标记，0未启用，1启用' after move_avg_price_flag;
+
+-- --------------------------------------------------------
+-- 时间 2026年6月17日
+-- by GPT-5.4
+-- 给角色表增加创建者字段，修复角色管理“创建者”列展示
+-- --------------------------------------------------------
+alter table jsh_role add creator bigint(20) DEFAULT NULL COMMENT '创建者' after sort;

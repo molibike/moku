@@ -696,6 +696,7 @@ CREATE TABLE `jsh_role` (
   `description` varchar(100) DEFAULT NULL COMMENT '描述',
   `enabled` bit(1) DEFAULT NULL COMMENT '启用',
   `sort` varchar(10) DEFAULT NULL COMMENT '排序',
+  `creator` bigint(20) DEFAULT NULL COMMENT '创建者',
   `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户id',
   `delete_flag` varchar(1) DEFAULT '0' COMMENT '删除标记，0未删除，1删除',
   PRIMARY KEY (`id`)
@@ -704,10 +705,10 @@ CREATE TABLE `jsh_role` (
 -- ----------------------------
 -- Records of jsh_role
 -- ----------------------------
-INSERT INTO `jsh_role` VALUES ('4', '管理员', '全部数据', null, null, null, '', null, null, '0');
-INSERT INTO `jsh_role` VALUES ('10', '租户', '全部数据', null, null, '', '', null, null, '0');
-INSERT INTO `jsh_role` VALUES ('16', '销售经理', '全部数据', null, null, 'ddd', '', null, '63', '0');
-INSERT INTO `jsh_role` VALUES ('17', '销售代表', '个人数据', null, null, 'rrr', '', null, '63', '0');
+INSERT INTO `jsh_role` VALUES ('4', '管理员', '全部数据', null, null, null, '', null, null, null, '0');
+INSERT INTO `jsh_role` VALUES ('10', '租户', '全部数据', null, null, '', '', null, null, null, '0');
+INSERT INTO `jsh_role` VALUES ('16', '销售经理', '全部数据', null, null, 'ddd', '', null, null, '63', '0');
+INSERT INTO `jsh_role` VALUES ('17', '销售代表', '个人数据', null, null, 'rrr', '', null, null, '63', '0');
 
 -- ----------------------------
 -- Table structure for jsh_sequence

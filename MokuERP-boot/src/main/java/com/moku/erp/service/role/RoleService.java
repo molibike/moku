@@ -65,35 +65,8 @@ public class RoleService {
     public List<RoleEx> allList()throws Exception {
         List<RoleEx> list=null;
         try{
-            // 获取当前用户的租户ID
             User currentUser = userService.getCurrentUser();
-            Long tenantId = currentUser != null ? currentUser.getTenantId() : 0L;
-            if (tenantId == 0L) {
-                // 超管用户，查询所有角色（包括所有租户）
-                list = roleMapperEx.selectByConditionRole(null, null, null, null);
-            } else {
-                // 租户用户，只查询本租户的角色，使用标准查询（带租户过滤）
-                RoleExample example = new RoleExample();
-                example.createCriteria().andEnabledEqualTo(true).andDeleteFlagNotEqualTo(BusinessConstants.DELETE_FLAG_DELETED);
-                example.setOrderByClause("sort asc, id desc");
-                List<Role> roleList = roleMapper.selectByExample(example);
-                // 转换为RoleEx并添加creatorName
-                list = new ArrayList<>();
-                for(Role role : roleList) {
-                    RoleEx roleEx = new RoleEx();
-                    roleEx.setId(role.getId());
-                    roleEx.setName(role.getName());
-                    roleEx.setDescription(role.getDescription());
-                    roleEx.setType(role.getType());
-                    roleEx.setEnabled(role.getEnabled());
-                    roleEx.setSort(role.getSort());
-                    roleEx.setTenantId(role.getTenantId());
-                    roleEx.setPriceLimit(role.getPriceLimit());
-                    // 租户用户的角色创建者都是"超管"（因为租户用户创建的角色实际上属于租户）
-                    roleEx.setCreatorName("超管");
-                    list.add(roleEx);
-                }
-            }
+            list = roleMapperEx.selectByConditionRole(null, null, getTenantFilter(currentUser), null, null);
         }catch(Exception e){
             JshException.readFail(logger, e);
         }
@@ -103,50 +76,8 @@ public class RoleService {
     public List<RoleEx> select(String name, String description, int offset, int rows)throws Exception {
         List<RoleEx> list=null;
         try{
-            // 获取当前用户的租户ID
             User currentUser = userService.getCurrentUser();
-            Long tenantId = currentUser != null ? currentUser.getTenantId() : 0L;
-            if (tenantId == 0L) {
-                // 超管用户，使用selectByConditionRole查询所有角色
-                list=roleMapperEx.selectByConditionRole(name, description, offset, rows);
-            } else {
-                // 租户用户，使用带租户过滤的查询
-                RoleExample example = new RoleExample();
-                RoleExample.Criteria criteria = example.createCriteria();
-                criteria.andEnabledEqualTo(true).andDeleteFlagNotEqualTo(BusinessConstants.DELETE_FLAG_DELETED);
-                if(StringUtil.isNotEmpty(name)) {
-                    criteria.andNameLike("%" + name + "%");
-                }
-                if(StringUtil.isNotEmpty(description)) {
-                    criteria.andDescriptionLike("%" + description + "%");
-                }
-                example.setOrderByClause("sort asc, id desc");
-                List<Role> roleList = roleMapper.selectByExample(example);
-                // 转换为RoleEx
-                list = new ArrayList<>();
-                for(Role role : roleList) {
-                    RoleEx roleEx = new RoleEx();
-                    roleEx.setId(role.getId());
-                    roleEx.setName(role.getName());
-                    roleEx.setDescription(role.getDescription());
-                    roleEx.setType(role.getType());
-                    roleEx.setEnabled(role.getEnabled());
-                    roleEx.setSort(role.getSort());
-                    roleEx.setTenantId(role.getTenantId());
-                    roleEx.setPriceLimit(role.getPriceLimit());
-                    list.add(roleEx);
-                }
-                // 手动分页
-                if(offset > 0 || rows > 0) {
-                    int fromIndex = offset > 0 ? offset : 0;
-                    int toIndex = rows > 0 ? Math.min(fromIndex + rows, list.size()) : list.size();
-                    if(fromIndex < list.size()) {
-                        list = list.subList(fromIndex, toIndex);
-                    } else {
-                        list = new ArrayList<>();
-                    }
-                }
-            }
+            list = roleMapperEx.selectByConditionRole(name, description, getTenantFilter(currentUser), offset, rows);
             for(RoleEx roleEx: list) {
                 String priceLimit = roleEx.getPriceLimit();
                 if(StringUtil.isNotEmpty(priceLimit)) {
@@ -169,25 +100,8 @@ public class RoleService {
     public Long countRole(String name, String description)throws Exception {
         Long result=null;
         try{
-            // 获取当前用户的租户ID
             User currentUser = userService.getCurrentUser();
-            Long tenantId = currentUser != null ? currentUser.getTenantId() : 0L;
-            if (tenantId == 0L) {
-                // 超管用户，使用countsByRole统计所有角色
-                result=roleMapperEx.countsByRole(name, description);
-            } else {
-                // 租户用户，使用带租户过滤的标准查询统计
-                RoleExample example = new RoleExample();
-                RoleExample.Criteria criteria = example.createCriteria();
-                criteria.andEnabledEqualTo(true).andDeleteFlagNotEqualTo(BusinessConstants.DELETE_FLAG_DELETED);
-                if(StringUtil.isNotEmpty(name)) {
-                    criteria.andNameLike("%" + name + "%");
-                }
-                if(StringUtil.isNotEmpty(description)) {
-                    criteria.andDescriptionLike("%" + description + "%");
-                }
-                result = roleMapper.countByExample(example);
-            }
+            result = roleMapperEx.countsByRole(name, description, getTenantFilter(currentUser));
         }catch(Exception e){
             JshException.readFail(logger, e);
         }
@@ -199,7 +113,14 @@ public class RoleService {
         Role role = JSONObject.parseObject(obj.toJSONString(), Role.class);
         int result=0;
         try{
+            User currentUser = userService.getCurrentUser();
             role.setEnabled(true);
+            if(currentUser != null) {
+                role.setCreator(currentUser.getId());
+                if(getTenantFilter(currentUser) != null) {
+                    role.setTenantId(currentUser.getTenantId());
+                }
+            }
             result=roleMapper.insertSelective(role);
             logService.insertLog("角色",
                     new StringBuffer(BusinessConstants.LOG_OPERATION_TYPE_ADD).append(role.getName()).toString(), request);
@@ -379,5 +300,12 @@ public class RoleService {
     public String getCurrentPriceLimit(HttpServletRequest request) throws Exception {
         Long userId = userService.getUserId(request);
         return userService.getRoleTypeByUserId(userId).getPriceLimit();
+    }
+
+    private Long getTenantFilter(User currentUser) {
+        if(currentUser == null || currentUser.getTenantId() == null || currentUser.getTenantId() == 0L) {
+            return null;
+        }
+        return currentUser.getTenantId();
     }
 }

@@ -239,28 +239,39 @@
   </style>
   <!-- 全局配置 -->
   <script>
-    function getPlatform(type) {
-      let res = '';
-      let ajax = new XMLHttpRequest();
-      let url = window._CONFIG['domianURL'] + '/platformConfig/getPlatform/' + type
-      ajax.onreadystatechange = function () {
-        if (ajax.readyState===4 &&ajax.status===200) {
-          res = ajax.responseText;
-        } else {
-          res = 'ERP系统';
-        }
-      }
-      ajax.open('get', url, false);
-      ajax.send(null);
-      return res;
-    }
     window._CONFIG = {};
     window._CONFIG['domianURL'] = '/api';
-    let statisticsCode = '1cd9bcbaae133f03a6eb19da6579aaba'
-    window.SYS_TITLE = getPlatform("name");
-    window.SYS_URL = getPlatform("url");
+    window.SYS_TITLE = 'ERP系统';
+    window.SYS_URL = '';
+    var statisticsCode = '1cd9bcbaae133f03a6eb19da6579aaba'
     window._statistics = 'https://hm.baidu.com/hm.js?' + statisticsCode
     document.title = window.SYS_TITLE;
+
+    // 异步获取平台配置，不阻塞页面加载
+    (function() {
+      var types = ['name', 'url'];
+      var pending = types.length;
+      types.forEach(function(type) {
+        var ajax = new XMLHttpRequest();
+        ajax.timeout = 5000;
+        ajax.open('get', window._CONFIG['domianURL'] + '/platformConfig/getPlatform/' + type, true);
+        ajax.onreadystatechange = function() {
+          if (ajax.readyState === 4) {
+            pending--;
+            if (ajax.status === 200 && ajax.responseText) {
+              if (type === 'name') {
+                window.SYS_TITLE = ajax.responseText;
+                document.title = window.SYS_TITLE;
+              } else if (type === 'url') {
+                window.SYS_URL = ajax.responseText;
+              }
+            }
+          }
+        };
+        ajax.send(null);
+      });
+    })();
+
     //statistics
     var _hmt = _hmt || [];
     (function() {

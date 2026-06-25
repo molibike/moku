@@ -11,13 +11,15 @@
         :visible="collapsed"
         width="150px"
       >
-        <side-menu
-          mode="inline"
-          :menus="menus"
-          @menuSelect="myMenuSelect"
-          :theme="navTheme"
-          :collapsed="false"
-          :collapsible="true"></side-menu>
+        <div @touchmove.stop>
+          <side-menu
+            mode="inline"
+            :menus="menus"
+            @menuSelect="myMenuSelect"
+            :theme="navTheme"
+            :collapsed="false"
+            :collapsible="true"></side-menu>
+        </div>
       </a-drawer>
 
       <side-menu
@@ -40,13 +42,15 @@
         :visible="collapsed"
         width="150px"
       >
-        <side-menu
-          mode="inline"
-          :menus="menus"
-          @menuSelect="myMenuSelect"
-          :theme="navTheme"
-          :collapsed="false"
-          :collapsible="true"></side-menu>
+        <div @touchmove.stop>
+          <side-menu
+            mode="inline"
+            :menus="menus"
+            @menuSelect="myMenuSelect"
+            :theme="navTheme"
+            :collapsed="false"
+            :collapsible="true"></side-menu>
+        </div>
       </a-drawer>
     </template>
 
@@ -552,6 +556,11 @@
     .ant-drawer-content {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+    .ant-drawer-wrapper-body {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
     }
     .ant-drawer-body {
       padding: 0;

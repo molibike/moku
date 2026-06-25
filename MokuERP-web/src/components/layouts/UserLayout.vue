@@ -124,20 +124,8 @@
     background-image: url(/static/bgimg.png?v=1);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center;
     position: relative;
     overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(24, 144, 255, 0.1) 0%, rgba(255, 255, 255, 0.3) 100%);
-      pointer-events: none;
-    }
   }
   #userLayout.user-layout-wrapper.mobile {
     position: fixed;
@@ -197,15 +185,11 @@
         flex: 0 0 746px;
         width: 746px;
         height: 100%;
-        padding: 20px 0 20px 20px;
 
         img {
           display: block;
           width: 100%;
           height: auto;
-          border-radius: 12px;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-          opacity: 0.95;
         }
       }
 

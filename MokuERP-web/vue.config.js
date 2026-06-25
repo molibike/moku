@@ -49,7 +49,7 @@ module.exports = {
         port: 3001,
         proxy: {
             '/api': {
-                target: 'http://192.168.105.246:9999',
+                target: 'http://127.0.0.1:9999',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '' }
             }

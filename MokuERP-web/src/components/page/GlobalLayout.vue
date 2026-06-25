@@ -549,10 +549,12 @@
       }
     }
 
-    .ant-drawer-body {
-      padding: 0;
+    .ant-drawer-content {
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+    }
+    .ant-drawer-body {
+      padding: 0;
     }
   }
 

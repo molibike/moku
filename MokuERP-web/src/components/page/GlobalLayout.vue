@@ -550,7 +550,9 @@
     }
 
     .ant-drawer-body {
-      padding: 0
+      padding: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
   }
 
